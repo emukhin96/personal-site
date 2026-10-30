@@ -204,6 +204,9 @@ VK, Slack, Discord, LinkedIn, X/Twitter, Mastodon. Когда вы отправ�
   {{- if not $img }}{{ $img = partial "resolve-image.html" (dict "path" $s.avatar) }}{{ end }}
   {{- with $img }}<meta property="og:image" content="{{ (.Fill "1200x630 jpg").Permalink }}">{{ end }}
   ```
+
+  **Проверено:** с аватаром у главной и записи без обложки `og:image` — `…/uploads/me_hu_….jpg`, у проекта — его обложка;
+  без аватара и обложки тега нет.
 - **Сгенерированная картинка** с заголовком записи — через `images.Text` поверх фона (глава 5).
 
 #### Модификация: `twitter:card`
