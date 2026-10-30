@@ -1,0 +1,9 @@
+{{- $cur := . }}
+<header class="site-header wrap">
+  <a class="brand" href="{{ "/" | relURL }}">{{ hugo.Data.site.name }}</a>
+  <nav>
+    {{- range slice (dict "url" "/projects/" "label" "Проекты" "section" "projects") (dict "url" "/posts/" "label" "Записи" "section" "posts") }}
+    <a href="{{ .url | relURL }}"{{ if eq $cur.Section .section }} aria-current="page"{{ end }}>{{ .label }}</a>
+    {{- end }}
+  </nav>
+</header>

@@ -1,0 +1,16 @@
+{{- /* .pages — записи; .hideProject — не показывать название проекта (на странице самого проекта). */}}
+{{- $hide := .hideProject }}
+<ul class="posts">
+  {{- range .pages }}
+  <li>
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_medium" }}</time>
+    <div>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- if not $hide }}{{ with partial "post-projects.html" . }}
+      <span class="project">— {{ range $i, $p := . }}{{ if $i }}, {{ end }}{{ $p.Title }}{{ end }}</span>
+      {{- end }}{{ end }}
+    </div>
+    {{- with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
+  </li>
+  {{- end }}
+</ul>

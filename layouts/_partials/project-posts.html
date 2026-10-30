@@ -1,0 +1,4 @@
+{{- /* Все записи, привязанные к проекту (по имени папки проекта), новые сверху. */}}
+{{- $slug := .File.ContentBaseName }}
+{{- $posts := where (where site.RegularPages "Section" "posts") "Params.projects" "intersect" (slice $slug) }}
+{{- return $posts.ByDate.Reverse }}

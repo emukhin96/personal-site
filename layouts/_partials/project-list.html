@@ -1,0 +1,10 @@
+<ul class="projects">
+  {{- range . }}
+  {{- $n := len (partial "project-posts.html" .) }}
+  <li>
+    <a class="title" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ partial "status.html" . }}
+    {{- with .Params.summary }}<p>{{ . }}</p>{{ end }}
+    {{- if $n }}<p class="meta">{{ lang.Translate "posts" $n }}</p>{{ end }}
+  </li>
+  {{- end }}
+</ul>

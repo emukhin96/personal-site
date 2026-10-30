@@ -1,0 +1,146 @@
+# Конфиг админки Sveltia CMS: https://sveltiacms.app/en/docs
+# Админка сама коммитит изменения в репозиторий, после чего GitHub Actions
+# пересобирает сайт и выкладывает его на сервер (~1 минута).
+
+backend:
+  name: github
+  repo: emukhin96/personal-site
+  branch: main
+  # Вход по личному токену GitHub — не нужен отдельный OAuth-сервер.
+  auth_methods: [token]
+  commit_messages:
+    create: 'Админка: создано «{{slug}}» в «{{collection}}»'
+    update: 'Админка: обновлено «{{slug}}» в «{{collection}}»'
+    delete: 'Админка: удалено «{{slug}}» из «{{collection}}»'
+    uploadMedia: 'Админка: загружен файл {{path}}'
+    deleteMedia: 'Админка: удалён файл {{path}}'
+
+app_title: Админка сайта
+
+# Общая медиатека (аватар и картинки, которые нужны в разных местах).
+# Картинки записей и проектов лежат рядом с ними, в папке записи.
+media_folder: assets/uploads
+public_folder: /uploads
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  timezone: local
+
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: projects
+    label: Проекты
+    label_singular: проект
+    icon: deployed_code
+    folder: content/projects
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    slug:
+      template: '{{title}}'
+      editable: [create]
+      hint: Адрес страницы — /projects/адрес/. Его используют записи, поэтому после создания он не меняется.
+      pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', 'Только латиница в нижнем регистре, цифры и дефисы']
+    reorder:
+      key: weight
+    summary: '{{title}}'
+    preview_path: /projects/{{slug}}/
+    fields:
+      - { name: title, label: Название, widget: string }
+      - name: summary
+        label: Кратко
+        widget: text
+        hint: Одна-две строки для списка проектов.
+      - name: status
+        label: Статус
+        widget: select
+        default: active
+        options:
+          - { label: В работе, value: active }
+          - { label: На паузе, value: paused }
+          - { label: Завершён, value: finished }
+          - { label: В архиве, value: archived }
+      - { name: started, label: Дата начала, widget: datetime, type: date, required: false }
+      - name: links
+        label: Ссылки
+        label_singular: ссылку
+        widget: list
+        required: false
+        summary: '{{label}} — {{url}}'
+        fields:
+          - { name: label, label: Подпись, widget: string }
+          - { name: url, label: Адрес, widget: string }
+      - { name: cover, label: Обложка, widget: image, required: false }
+      - { name: body, label: Описание, widget: markdown, required: false }
+
+  - name: posts
+    label: Записи
+    label_singular: запись
+    icon: article
+    folder: content/posts
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    slug:
+      template: '{{title}}'
+      editable: [create]
+      hint: Адрес страницы — /posts/адрес/.
+      pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', 'Только латиница в нижнем регистре, цифры и дефисы']
+    summary: '{{title}} — {{date | date("DD.MM.YYYY")}}'
+    sortable_fields:
+      fields: [date, title]
+      default: { field: date, direction: descending }
+    preview_path: /posts/{{slug}}/
+    fields:
+      - { name: title, label: Заголовок, widget: string }
+      - { name: date, label: Дата, widget: datetime, type: date, default: '{{now}}' }
+      - name: projects
+        label: Проект
+        widget: relation
+        collection: projects
+        value_field: '{{slug}}'
+        display_fields: [title]
+        multiple: true
+        required: false
+        hint: Запись появится в хронологии выбранных проектов.
+      - name: summary
+        label: Кратко
+        widget: text
+        required: false
+        hint: Подзаголовок в списках записей.
+      - { name: cover, label: Обложка, widget: image, required: false }
+      - { name: draft, label: Черновик, widget: boolean, default: false, required: false, hint: Черновики не публикуются на сайте. }
+      - { name: body, label: Текст, widget: markdown }
+
+singletons:
+  - name: settings
+    label: Настройки сайта
+    icon: settings
+    file: data/site.yaml
+    fields:
+      - { name: name, label: Имя, widget: string, hint: Заголовок главной и название сайта. }
+      - { name: tagline, label: Подзаголовок, widget: string, required: false }
+      - name: description
+        label: Описание для поисковиков
+        widget: text
+        required: false
+      - { name: about, label: Обо мне, widget: markdown, required: false }
+      - { name: avatar, label: Фото, widget: image, required: false }
+      - name: links
+        label: Ссылки на главной
+        label_singular: ссылку
+        widget: list
+        required: false
+        summary: '{{label}} — {{url}}'
+        fields:
+          - { name: label, label: Подпись, widget: string }
+          - { name: url, label: Адрес, widget: string, hint: 'https://… или mailto:…' }
+      - name: footer
+        label: Подвал
+        widget: markdown
+        required: false
+        hint: Если пусто — «© год имя».
+      - { name: accent, label: Цвет акцента, widget: color, allowInput: true, default: '#2563eb' }

@@ -1,0 +1,6 @@
+{{- /* Страницы проектов, к которым привязана запись. */}}
+{{- $out := slice }}
+{{- range .Params.projects }}
+  {{- with site.GetPage (printf "/projects/%s" .) }}{{ $out = $out | append . }}{{ end }}
+{{- end }}
+{{- return $out }}
