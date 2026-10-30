@@ -1,27 +1,65 @@
-/* --accent задаётся из data/site.yaml (Настройки сайта → Цвет акцента) */
+/*
+  Оформление собрано из токенов. Тема (assets/css/themes/<имя>.css) задаёт
+  палитры для светлого (--l-*) и тёмного (--d-*) режимов, шрифты и размеры;
+  здесь — значения темы «Базовая» и правила, общие для всех тем.
+  --accent задаётся из data/site.yaml (Настройки сайта → Цвет акцента),
+  режим — атрибутом data-mode на <html>: light, dark или нет атрибута (как в системе).
+*/
 :root {
   --accent: #2563eb;
-  --bg: #fdfdfc;
-  --fg: #1c1c1a;
-  --muted: #6b6b66;
-  --line: #e7e6e2;
-  --code-bg: #f4f3f0;
-  --link: var(--accent);
-  --radius: 6px;
+
+  --l-bg: #fdfdfc;
+  --l-fg: #1c1c1a;
+  --l-muted: #6b6b66;
+  --l-line: #e7e6e2;
+  --l-code-bg: #f4f3f0;
+
+  --d-bg: #141413;
+  --d-fg: #e8e7e3;
+  --d-muted: #9a9993;
+  --d-line: #2c2c2a;
+  --d-code-bg: #1d1d1b;
+
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-head: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-size: 17px;
+  --leading: 1.65;
   --measure: 40rem;
-  color-scheme: light dark;
+  --radius: 6px;
+  --head-weight: 700;
+  --head-tracking: -0.01em;
+  --h1-size: 1.9rem;
+
+  --bg: var(--l-bg);
+  --fg: var(--l-fg);
+  --muted: var(--l-muted);
+  --line: var(--l-line);
+  --code-bg: var(--l-code-bg);
+  --link: var(--accent);
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #141413;
-    --fg: #e8e7e3;
-    --muted: #9a9993;
-    --line: #2c2c2a;
-    --code-bg: #1d1d1b;
+  :root:not([data-mode="light"]) {
+    --bg: var(--d-bg);
+    --fg: var(--d-fg);
+    --muted: var(--d-muted);
+    --line: var(--d-line);
+    --code-bg: var(--d-code-bg);
     /* Тот же акцент, но светлее — чтобы ссылки читались на тёмном фоне */
     --link: color-mix(in oklab, var(--accent) 65%, white);
+    color-scheme: dark;
   }
+}
+:root[data-mode="dark"] {
+  --bg: var(--d-bg);
+  --fg: var(--d-fg);
+  --muted: var(--d-muted);
+  --line: var(--d-line);
+  --code-bg: var(--d-code-bg);
+  --link: color-mix(in oklab, var(--accent) 65%, white);
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -35,7 +73,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
+  font-size: var(--font-size);
+  line-height: var(--leading);
   font-kerning: normal;
 }
 
@@ -48,8 +88,8 @@ body {
 a { color: var(--link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
 a:hover { text-decoration-thickness: 2px; }
 
-h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
-h1 { font-size: 1.9rem; margin: 0 0 0.5rem; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: var(--head-weight); line-height: 1.25; letter-spacing: var(--head-tracking); text-wrap: balance; }
+h1 { font-size: var(--h1-size); margin: 0 0 0.5rem; }
 h2 { font-size: 1.3rem; margin: 2.5rem 0 1rem; }
 h3 { font-size: 1.1rem; margin: 2rem 0 0.75rem; }
 
@@ -68,7 +108,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   padding-top: 2rem;
   padding-bottom: 3rem;
 }
-.site-header .brand { color: var(--fg); font-weight: 600; text-decoration: none; }
+.site-header .brand { color: var(--fg); font-family: var(--font-head); font-weight: 600; text-decoration: none; }
 .site-header nav { display: flex; gap: 1.25rem; }
 .site-header nav a { color: var(--muted); text-decoration: none; }
 .site-header nav a:hover,
@@ -153,7 +193,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .content th, .content td { border-bottom: 1px solid var(--line); padding: 0.4rem 0.75rem 0.4rem 0; text-align: left; }
 .content .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25rem 0; }
 
-code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 0.88em; }
+code, pre { font-family: var(--font-mono); font-size: 0.88em; }
 :not(pre) > code { background: var(--code-bg); padding: 0.12em 0.35em; border-radius: 4px; }
 pre, .chroma { background: var(--code-bg) !important; }
 pre { padding: 1rem 1.1rem; overflow-x: auto; border-radius: var(--radius); line-height: 1.5; }

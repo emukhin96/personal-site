@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="{{ site.Language.Locale }}">
+{{- $mode := hugo.Data.site.mode }}
+<html lang="{{ site.Language.Locale }}"{{ if in (slice "light" "dark") $mode }} data-mode="{{ $mode }}"{{ end }}>
 <head>
   {{- partial "head.html" . }}
 </head>

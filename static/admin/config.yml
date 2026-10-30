@@ -143,4 +143,21 @@ singletons:
         widget: markdown
         required: false
         hint: Если пусто — «© год имя».
+      - name: theme
+        label: Тема оформления
+        widget: select
+        default: default
+        options:
+          - { label: 'Базовая — системный шрифт', value: default }
+          - { label: 'Книжная — антиква, тёплая бумага', value: book }
+          - { label: 'Моно — моноширинный шрифт', value: mono }
+          - { label: 'Строгая — гротеск, чёрное на белом', value: strict }
+      - name: mode
+        label: Светлая или тёмная
+        widget: select
+        default: auto
+        options:
+          - { label: 'Как в системе у посетителя', value: auto }
+          - { label: 'Всегда светлая', value: light }
+          - { label: 'Всегда тёмная', value: dark }
       - { name: accent, label: Цвет акцента, widget: color, allowInput: true, default: '#2563eb' }

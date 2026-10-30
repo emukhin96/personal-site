@@ -21,7 +21,14 @@
 {{- with $s.avatar }}{{ with partial "resolve-image.html" (dict "path" .) }}
 <link rel="icon" href="{{ (.Fill "64x64 png").RelPermalink }}">
 {{- end }}{{ end }}
-{{- $css := slice (resources.Get "css/syntax.css") (resources.Get "css/main.css") | resources.Concat "css/site.css" | minify | fingerprint }}
+{{- /* Тема оформления: Настройки сайта → Тема (assets/css/themes/<имя>.css) */}}
+{{- $themeName := $s.theme | default "default" }}
+{{- $theme := resources.Get (printf "css/themes/%s.css" $themeName) }}
+{{- if not $theme }}
+  {{- warnf "Тема %q не найдена в assets/css/themes — использую «Базовую»" $themeName }}
+  {{- $theme = resources.Get "css/themes/default.css" }}
+{{- end }}
+{{- $css := slice (resources.Get "css/syntax.css") (resources.Get "css/main.css") $theme | resources.Concat "css/site.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 {{- with $s.accent }}
 <style>:root{--accent:{{ . | safeCSS }}}</style>
