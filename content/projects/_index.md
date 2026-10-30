@@ -1,0 +1,4 @@
+---
+title: Проекты
+outputs: [html]
+---

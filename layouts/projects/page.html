@@ -1,0 +1,24 @@
+{{ define "main" }}
+{{- $posts := partial "project-posts.html" . }}
+<article>
+  <h1>{{ .Title }} {{ partial "status.html" . }}</h1>
+  {{- with .Params.summary }}<p class="lead">{{ . }}</p>{{ end }}
+  {{- with .Params.links }}
+  <ul class="links">
+    {{- range . }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
+  </ul>
+  {{- end }}
+  {{- with partial "resolve-image.html" (dict "page" . "path" .Params.cover) }}
+  <div class="cover">{{ partial "img.html" (dict "res" . "alt" "" "eager" true) }}</div>
+  {{- end }}
+  {{- with .Content }}<div class="content">{{ . }}</div>{{ end }}
+</article>
+
+{{- with $posts }}
+<h2>Хронология</h2>
+{{ partial "post-list.html" (dict "pages" . "hideProject" true) }}
+{{- end }}
+{{- with .Params.started }}
+<p class="meta" style="margin-top:2rem">Проект начат {{ . | time.Format ":date_long" }}</p>
+{{- end }}
+{{ end }}

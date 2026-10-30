@@ -1,0 +1,13 @@
+{{- /* Выводит <img> из ресурса: растровые картинки уменьшаются до width и переводятся в WebP. */}}
+{{- $res := .res }}
+{{- $width := .width | default 1440 }}
+{{- if in (slice "jpg" "jpeg" "png" "webp" "tiff" "bmp") (strings.TrimPrefix "image/" $res.MediaType.SubType) }}
+  {{- if gt $res.Width $width }}
+    {{- $res = $res.Resize (printf "%dx webp" $width) }}
+  {{- else }}
+    {{- $res = $res.Process "webp" }}
+  {{- end }}
+<img src="{{ $res.RelPermalink }}" width="{{ $res.Width }}" height="{{ $res.Height }}" alt="{{ .alt }}"{{ with .class }} class="{{ . }}"{{ end }}{{ if not .eager }} loading="lazy"{{ end }} decoding="async">
+{{- else }}
+<img src="{{ $res.RelPermalink }}" alt="{{ .alt }}"{{ with .class }} class="{{ . }}"{{ end }}{{ if not .eager }} loading="lazy"{{ end }} decoding="async">
+{{- end }}

@@ -1,0 +1,33 @@
+{{ define "main" }}
+{{- $projects := partial "post-projects.html" . }}
+<article>
+  <h1>{{ .Title }}</h1>
+  <p class="meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+    {{- with $projects }}<span>{{ range $i, $p := . }}{{ if $i }}, {{ end }}<a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ end }}</span>{{ end }}
+  </p>
+  {{- with partial "resolve-image.html" (dict "page" . "path" .Params.cover) }}
+  <div class="cover">{{ partial "img.html" (dict "res" . "alt" "" "eager" true) }}</div>
+  {{- end }}
+  <div class="content">{{ .Content }}</div>
+</article>
+
+{{- /* Навигация по хронологии первого проекта записи: старее / новее */}}
+{{- with index $projects 0 }}
+  {{- $project := . }}
+  {{- $list := (partial "project-posts.html" .).ByDate }}
+  {{- $prev := false }}{{ $next := false }}{{ $found := false }}
+  {{- range $list }}
+    {{- if eq .RelPermalink $.RelPermalink }}{{ $found = true }}
+    {{- else if not $found }}{{ $prev = . }}
+    {{- else if not $next }}{{ $next = . }}
+    {{- end }}
+  {{- end }}
+  {{- if or $prev $next }}
+<nav class="pager" aria-label="Записи проекта {{ $project.Title }}">
+  {{- with $prev }}<a class="prev" href="{{ .RelPermalink }}"><small>← раньше</small>{{ .Title }}</a>{{ end }}
+  {{- with $next }}<a class="next" href="{{ .RelPermalink }}"><small>позже →</small>{{ .Title }}</a>{{ end }}
+</nav>
+  {{- end }}
+{{- end }}
+{{ end }}

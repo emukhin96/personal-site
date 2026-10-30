@@ -1,0 +1,38 @@
+{{- $s := hugo.Data.site }}
+{{- /* Рендерим контент заранее, чтобы render-хуки успели отметить формулы (hasMath) */}}
+{{- $_ := .Content }}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $title := cond .IsHome $s.name (printf "%s — %s" .Title $s.name) }}
+<title>{{ $title }}</title>
+{{- $desc := or .Params.summary $s.description }}
+<meta name="description" content="{{ $desc | plainify }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:title" content="{{ cond .IsHome $s.name .Title }}">
+<meta property="og:description" content="{{ $desc | plainify }}">
+<meta property="og:type" content="{{ cond .IsPage "article" "website" }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{- with partial "resolve-image.html" (dict "page" . "path" .Params.cover) }}
+<meta property="og:image" content="{{ (.Fill "1200x630 webp").Permalink }}">
+{{- end }}
+{{- with site.GetPage "/posts" }}{{ with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ $s.name }} — записи">
+{{- end }}{{ end }}
+{{- with $s.avatar }}{{ with partial "resolve-image.html" (dict "path" .) }}
+<link rel="icon" href="{{ (.Fill "64x64 png").RelPermalink }}">
+{{- end }}{{ end }}
+{{- /* Тема оформления: Настройки сайта → Тема (assets/css/themes/<имя>.css) */}}
+{{- $themeName := $s.theme | default "default" }}
+{{- $theme := resources.Get (printf "css/themes/%s.css" $themeName) }}
+{{- if not $theme }}
+  {{- warnf "Тема %q не найдена в assets/css/themes — использую «Базовую»" $themeName }}
+  {{- $theme = resources.Get "css/themes/default.css" }}
+{{- end }}
+{{- $css := slice (resources.Get "css/syntax.css") (resources.Get "css/main.css") $theme | resources.Concat "css/site.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- with $s.accent }}
+<style>:root{--accent:{{ . | safeCSS }}}</style>
+{{- end }}
+{{- if .Store.Get "hasMath" }}
+<link rel="stylesheet" href="{{ "katex/katex.min.css" | relURL }}">
+{{- end }}

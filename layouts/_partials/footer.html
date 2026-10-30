@@ -1,0 +1,11 @@
+{{- $s := hugo.Data.site }}
+<footer class="site-footer wrap">
+  {{- with $s.footer }}
+  <div>{{ . | markdownify }}</div>
+  {{- else }}
+  <p>© {{ now.Year }} {{ $s.name }}</p>
+  {{- end }}
+  {{- with site.GetPage "/posts" }}{{ with .OutputFormats.Get "rss" }}
+  <p><a href="{{ .RelPermalink }}">RSS</a></p>
+  {{- end }}{{ end }}
+</footer>
