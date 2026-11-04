@@ -1,6 +1,9 @@
 {{- $cur := . }}
 <header class="site-header wrap">
+  {{- /* На главной имя уже стоит заголовком страницы — в шапке не повторяем */}}
+  {{- if not .IsHome }}
   <a class="brand" href="{{ "/" | relURL }}">{{ hugo.Data.site.name }}</a>
+  {{- end }}
   <nav>
     {{- range slice (dict "url" "/projects/" "label" "Проекты" "section" "projects") (dict "url" "/posts/" "label" "Записи" "section" "posts") }}
     <a href="{{ .url | relURL }}"{{ if eq $cur.Section .section }} aria-current="page"{{ end }}>{{ .label }}</a>

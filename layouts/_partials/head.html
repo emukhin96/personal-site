@@ -22,7 +22,7 @@
 <link rel="icon" href="{{ (.Fill "64x64 png").RelPermalink }}">
 {{- end }}{{ end }}
 {{- /* Тема оформления: Настройки сайта → Тема (assets/css/themes/<имя>.css) */}}
-{{- $themeName := $s.theme | default "default" }}
+{{- $themeName := $s.theme | default "strict" }}
 {{- $theme := resources.Get (printf "css/themes/%s.css" $themeName) }}
 {{- if not $theme }}
   {{- warnf "Тема %q не найдена в assets/css/themes — использую «Базовую»" $themeName }}

@@ -34,10 +34,10 @@ GitHub Actions → VPS на Hetzner с [Caddy](https://caddyserver.com) (HTTPS �
 
 | Тема | Файл | Характер |
 |---|---|---|
+| **Строгая** (основная) | `assets/css/themes/strict.css` | гротеск Golos Text, чёрное на белом, крупный заголовок |
 | Базовая | `assets/css/themes/default.css` | системный шрифт, нейтральная бумага |
 | Книжная | `assets/css/themes/book.css` | антиква Literata, тёплая бумага, курсивные подзаголовки |
 | Моно | `assets/css/themes/mono.css` | всё моноширинным JetBrains Mono, статусы в скобках |
-| Строгая | `assets/css/themes/strict.css` | гротеск Golos Text, чёрное на белом, крупный заголовок |
 
 Тема — это токены (`--l-*` для светлого режима, `--d-*` для тёмного, шрифты, размеры) и пара своих правил;
 разметка у всех тем общая. Шрифты лежат в `static/fonts/` (лицензия OFL), браузер скачивает только шрифт выбранной темы.

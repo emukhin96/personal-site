@@ -146,12 +146,12 @@ singletons:
       - name: theme
         label: Тема оформления
         widget: select
-        default: default
+        default: strict
         options:
+          - { label: 'Строгая — гротеск, чёрное на белом', value: strict }
           - { label: 'Базовая — системный шрифт', value: default }
           - { label: 'Книжная — антиква, тёплая бумага', value: book }
           - { label: 'Моно — моноширинный шрифт', value: mono }
-          - { label: 'Строгая — гротеск, чёрное на белом', value: strict }
       - name: mode
         label: Светлая или тёмная
         widget: select

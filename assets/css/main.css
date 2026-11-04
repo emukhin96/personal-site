@@ -109,7 +109,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   padding-bottom: 3rem;
 }
 .site-header .brand { color: var(--fg); font-family: var(--font-head); font-weight: 600; text-decoration: none; }
-.site-header nav { display: flex; gap: 1.25rem; }
+.site-header nav { display: flex; gap: 1.25rem; margin-left: auto; }
 .site-header nav a { color: var(--muted); text-decoration: none; }
 .site-header nav a:hover,
 .site-header nav a[aria-current] { color: var(--fg); }
