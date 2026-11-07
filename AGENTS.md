@@ -8,3 +8,4 @@
 - Внешних JS/CSS на сайте нет (KaTeX — `static/katex/`, шрифты тем — `static/fonts/`); админка грузит Sveltia с unpkg.
 - Проверка перед PR: `hugo --gc --minify` без WARN/ERROR.
 - Тексты интерфейса — на русском.
+- Учебник `docs/tutorial/` цитирует код проекта. Меняешь шаблон, настройку или скрипт — правь главу, где он разобран (карта в `docs/tutorial/README.md`).
