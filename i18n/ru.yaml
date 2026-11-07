@@ -1,5 +1,0 @@
-posts:
-  one: "{{ .Count }} запись"
-  few: "{{ .Count }} записи"
-  many: "{{ .Count }} записей"
-  other: "{{ .Count }} записи"

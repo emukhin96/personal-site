@@ -6,7 +6,7 @@
   режим — атрибутом data-mode на <html>: light, dark или нет атрибута (как в системе).
 */
 :root {
-  --accent: #2563eb;
+  --accent: #4a6a9c;
 
   --l-bg: #fdfdfc;
   --l-fg: #1c1c1a;
@@ -85,8 +85,16 @@ body {
   padding: 0 1.25rem;
 }
 
-a { color: var(--link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
-a:hover { text-decoration-thickness: 2px; }
+/* Подчёркивание тонкое и полупрозрачное, на наведении проявляется целиком — без утолщения. */
+a {
+  color: var(--link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 0.15s;
+}
+a:hover { text-decoration-color: currentColor; }
 
 h1, h2, h3 { font-family: var(--font-head); font-weight: var(--head-weight); line-height: 1.25; letter-spacing: var(--head-tracking); text-wrap: balance; }
 h1 { font-size: var(--h1-size); margin: 0 0 0.5rem; }
@@ -169,14 +177,9 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .status-active { color: var(--link); border-color: currentColor; }
 
 .posts { list-style: none; padding: 0; margin: 0; }
-.posts li { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0 1rem; padding: 0.4rem 0; }
-.posts time { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.95rem; padding-top: 0.05em; }
-.posts .project { color: var(--muted); font-size: 0.9rem; }
-.posts .summary { grid-column: 2; color: var(--muted); font-size: 0.95rem; margin: 0.1rem 0 0; }
-@media (max-width: 30rem) {
-  .posts li { grid-template-columns: 1fr; }
-  .posts .summary { grid-column: 1; }
-}
+.posts li { padding: 0.6rem 0; }
+.posts .meta { font-size: 0.875rem; margin: 0.1rem 0 0; }
+.posts .summary { color: var(--muted); font-size: 0.95rem; margin: 0.2rem 0 0; }
 
 .year { font-size: 1rem; color: var(--muted); margin: 2rem 0 0.5rem; }
 

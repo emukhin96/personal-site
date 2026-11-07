@@ -19,6 +19,6 @@
 {{ partial "post-list.html" (dict "pages" . "hideProject" true) }}
 {{- end }}
 {{- with .Params.started }}
-<p class="meta" style="margin-top:2rem">Проект начат {{ . | time.Format ":date_long" }}</p>
+<p class="meta" style="margin-top:2rem">Проект начат {{ . | time.Format ":date_long" | replaceRE `[^\pL\pN]*г\.$` "" }}</p>
 {{- end }}
 {{ end }}

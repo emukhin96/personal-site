@@ -3,13 +3,13 @@
 <ul class="posts">
   {{- range .pages }}
   <li>
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_medium" }}</time>
-    <div>
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-      {{- if not $hide }}{{ with partial "post-projects.html" . }}
-      <span class="project">— {{ range $i, $p := . }}{{ if $i }}, {{ end }}{{ $p.Title }}{{ end }}</span>
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <p class="meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" | replaceRE `[^\pL\pN]*г\.$` "" }}</time>
+      {{- if not $hide }}{{ with partial "post-projects.html" . -}}
+      <span>{{ range $i, $p := . }}{{ if $i }}, {{ end }}{{ $p.Title }}{{ end }}</span>
       {{- end }}{{ end }}
-    </div>
+    </p>
     {{- with .Params.summary }}<p class="summary">{{ . }}</p>{{ end }}
   </li>
   {{- end }}
