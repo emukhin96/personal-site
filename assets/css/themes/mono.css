@@ -66,4 +66,3 @@ h2.year::before { content: none; }
 .status::after { content: "]"; }
 :not(pre) > code { padding: 0; background: none; }
 :not(pre) > code::before, :not(pre) > code::after { content: "`"; color: var(--muted); }
-.posts li { grid-template-columns: 8.5rem 1fr; }

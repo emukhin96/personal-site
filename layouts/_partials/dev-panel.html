@@ -1,0 +1,79 @@
+{{- /*
+  Панель для сравнения оформления — только под `hugo server`, в сборку не попадает.
+  Цвет акцента, тема и режим меняются на лету и запоминаются в localStorage,
+  чтобы выбор сохранялся при переходах по страницам. Сам сайт не меняет:
+  понравившийся вариант нужно записать в data/site.yaml (или в админке).
+*/}}
+{{- $s := hugo.Data.site }}
+{{- $accents := slice
+  (dict "c" "#2563eb" "n" "Прежний яркий")
+  (dict "c" "#3d5a80" "n" "Стальной")
+  (dict "c" "#2f5f8f" "n" "Морской")
+  (dict "c" "#4a6a9c" "n" "Васильковый, приглушённый")
+  (dict "c" "#2b4a6f" "n" "Чернильный")
+  (dict "c" "#355c7d" "n" "Сизый")
+  (dict "c" "#3b6e8f" "n" "Петроль")
+}}
+{{- $themes := dict }}
+{{- range resources.Match "css/themes/*.css" }}
+  {{- $name := path.BaseName .Name }}
+  {{- $css := slice (resources.Get "css/syntax.css") (resources.Get "css/main.css") . | resources.Concat (printf "css/dev-%s.css" $name) }}
+  {{- $themes = merge $themes (dict $name $css.RelPermalink) }}
+{{- end }}
+<style>
+  #devp { position: fixed; right: 12px; bottom: 12px; z-index: 99; width: 260px; padding: 12px 14px;
+    font: 13px/1.4 system-ui, sans-serif; color: #222; background: #fff; border: 1px solid #ccc;
+    border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.12); }
+  #devp.min > :not(header) { display: none; }
+  #devp header { display: flex; justify-content: space-between; font-weight: 600; cursor: pointer; }
+  #devp .sw { display: flex; align-items: center; gap: 8px; width: 100%; margin: 2px 0; padding: 3px 4px;
+    border: 1px solid transparent; border-radius: 5px; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  #devp .sw[aria-pressed="true"] { border-color: #222; }
+  #devp .sw i { flex: none; width: 16px; height: 16px; border-radius: 50%; }
+  #devp .sw code { margin-left: auto; color: #888; font-size: 11px; background: none; padding: 0; }
+  #devp .sw code::before, #devp .sw code::after { content: none; }
+  #devp label { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  #devp select, #devp input { font: inherit; }
+  #devp p { margin: 8px 0 0; color: #888; font-size: 11px; }
+</style>
+<div id="devp">
+  <header><span>Сравнение оформления</span><span id="devp-t">–</span></header>
+  <div>
+    {{- range $accents }}
+    <button class="sw" data-c="{{ .c }}" type="button"><i style="background:{{ .c | safeCSS }}"></i>{{ .n }}<code>{{ .c }}</code></button>
+    {{- end }}
+    <label>Свой цвет <input id="devp-c" type="color"></label>
+    <label>Тема <select id="devp-th">{{ range $k, $_ := $themes }}<option>{{ $k }}</option>{{ end }}</select></label>
+    <label>Режим <select id="devp-m"><option value="">как в системе</option><option value="light">светлый</option><option value="dark">тёмный</option></select></label>
+    <p>В сайте сейчас: тема {{ $s.theme }}, акцент {{ $s.accent }}. Выбор здесь ничего не сохраняет в файлы.</p>
+  </div>
+</div>
+<script>
+(() => {
+  const themes = {{ $themes | jsonify | safeJS }};
+  const base = { c: {{ $s.accent | default "#3d5a80" }}, th: {{ $s.theme | default "strict" }}, m: {{ cond (in (slice "light" "dark") $s.mode) $s.mode "" }} };
+  const st = Object.assign({}, base, JSON.parse(localStorage.getItem('devp') || '{}'));
+  const root = document.documentElement, p = document.getElementById('devp');
+  const sheet = document.querySelector('link[rel=stylesheet][integrity]');
+  let tag = document.getElementById('devp-acc');
+  if (!tag) { tag = document.createElement('style'); tag.id = 'devp-acc'; document.head.append(tag); }
+  const apply = () => {
+    tag.textContent = `:root{--accent:${st.c}}`;
+    if (themes[st.th] && sheet && !sheet.href.endsWith(themes[st.th])) { sheet.removeAttribute('integrity'); sheet.href = themes[st.th]; }
+    st.m ? root.setAttribute('data-mode', st.m) : root.removeAttribute('data-mode');
+    p.querySelectorAll('.sw').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === st.c));
+    p.querySelector('#devp-c').value = st.c;
+    p.querySelector('#devp-th').value = st.th;
+    p.querySelector('#devp-m').value = st.m;
+    p.classList.toggle('min', !!st.min);
+    p.querySelector('#devp-t').textContent = st.min ? '+' : '–';
+    localStorage.setItem('devp', JSON.stringify(st));
+  };
+  p.querySelectorAll('.sw').forEach(b => b.onclick = () => { st.c = b.dataset.c; apply(); });
+  p.querySelector('#devp-c').oninput = e => { st.c = e.target.value; apply(); };
+  p.querySelector('#devp-th').onchange = e => { st.th = e.target.value; apply(); };
+  p.querySelector('#devp-m').onchange = e => { st.m = e.target.value; apply(); };
+  p.querySelector('header').onclick = () => { st.min = !st.min; apply(); };
+  apply();
+})();
+</script>

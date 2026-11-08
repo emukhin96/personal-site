@@ -160,4 +160,4 @@ singletons:
           - { label: 'Как в системе у посетителя', value: auto }
           - { label: 'Всегда светлая', value: light }
           - { label: 'Всегда тёмная', value: dark }
-      - { name: accent, label: Цвет акцента, widget: color, allowInput: true, default: '#2563eb' }
+      - { name: accent, label: Цвет акцента, widget: color, allowInput: true, default: '#4a6a9c' }

@@ -45,7 +45,7 @@ h1 { line-height: 1.1; }
   text-transform: uppercase;
   color: var(--muted);
 }
-a { color: var(--fg); text-decoration-color: var(--link); text-decoration-thickness: 2px; }
-a:hover { color: var(--link); }
+a { color: var(--fg); text-decoration-color: color-mix(in oklab, var(--link) 70%, transparent); }
+a:hover { color: var(--link); text-decoration-color: currentColor; }
 .projects .title { font-size: 1.1rem; }
 .status { border-radius: 0; border-color: currentColor; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.65rem; }
