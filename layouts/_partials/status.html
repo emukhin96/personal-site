@@ -1,0 +1,2 @@
+{{- $labels := dict "active" "в работе" "paused" "на паузе" "finished" "завершён" "archived" "в архиве" }}
+{{- with .Params.status }}<span class="status status-{{ . }}">{{ index $labels . | default . }}</span>{{ end }}

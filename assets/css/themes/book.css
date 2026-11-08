@@ -1,0 +1,63 @@
+/* «Книжная» — антиква Literata, тёплая бумага, курсивные подзаголовки, старостильные цифры. */
+/* Literata (OFL-1.1), вариативный, латиница + кириллица. Файлы — static/fonts/literata/ */
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(/fonts/literata/literata-cyrillic-wght-normal.woff2) format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(/fonts/literata/literata-latin-wght-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(/fonts/literata/literata-cyrillic-wght-italic.woff2) format('woff2');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(/fonts/literata/literata-latin-wght-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root {
+  --l-bg: #fbfaf6;
+  --l-fg: #1f1d1a;
+  --l-muted: #6f6a60;
+  --l-line: #e6e1d6;
+  --l-code-bg: #f2efe8;
+
+  --d-bg: #181715;
+  --d-fg: #e8e4da;
+  --d-muted: #9d978a;
+  --d-line: #302d28;
+  --d-code-bg: #211f1c;
+
+  --font-body: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-size: 18px;
+  --leading: 1.7;
+  --measure: 44rem;
+  --head-weight: 600;
+  --head-tracking: 0;
+  --h1-size: 2.1rem;
+}
+
+body { font-variant-numeric: oldstyle-nums; font-optical-sizing: auto; }
+.intro .tagline, .lead { font-style: italic; }
+.posts time, .meta { font-variant-numeric: oldstyle-nums tabular-nums; }
+.content blockquote { font-style: italic; border-left-width: 1px; }
+.status { font-style: italic; border-color: transparent; padding-inline: 0.2em; }
+.status-active { border-color: transparent; }

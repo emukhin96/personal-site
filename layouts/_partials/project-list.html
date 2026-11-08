@@ -1,0 +1,8 @@
+<ul class="projects">
+  {{- range . }}
+  <li>
+    <a class="title" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ partial "status.html" . }}
+    {{- with .Params.summary }}<p>{{ . }}</p>{{ end }}
+  </li>
+  {{- end }}
+</ul>

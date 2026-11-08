@@ -1,0 +1,9 @@
+{{- $img := "" }}
+{{- with partial "resolve-image.html" (dict "page" .Page "path" .Destination) }}
+  {{- $img = partial "img.html" (dict "res" . "alt" $.PlainText) }}
+{{- else }}
+  {{- $img = printf `<img src="%s" alt="%s" loading="lazy" decoding="async">` (.Destination | safeURL) .PlainText }}
+{{- end }}
+{{- if and .IsBlock .Title }}
+<figure>{{ $img | safeHTML }}<figcaption>{{ .Title }}</figcaption></figure>
+{{- else }}{{ $img | safeHTML }}{{ end -}}

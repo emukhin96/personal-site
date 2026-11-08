@@ -1,0 +1,34 @@
+{{ define "main" }}
+{{- $s := hugo.Data.site }}
+<section class="intro">
+  {{- with $s.avatar }}{{ with partial "resolve-image.html" (dict "path" .) }}
+  {{- $a := .Fill "176x176 webp" }}
+  <img class="avatar" src="{{ $a.RelPermalink }}" width="88" height="88" alt="">
+  {{- end }}{{ end }}
+  <div>
+    <h1>{{ $s.name }}</h1>
+    {{- with $s.tagline }}<p class="tagline">{{ . }}</p>{{ end }}
+  </div>
+</section>
+{{- with $s.about }}<div class="about content">{{ . | markdownify }}</div>{{ end }}
+{{- with $s.links }}
+<ul class="links">
+  {{- range . }}<li><a href="{{ .url }}"{{ if strings.HasPrefix .url "http" }} rel="me"{{ end }}>{{ .label }}</a></li>{{ end }}
+</ul>
+{{- end }}
+
+{{- with site.GetPage "/projects" }}{{ with .Pages.ByWeight }}
+<div class="section-head">
+  <h2>Проекты</h2>
+</div>
+{{ partial "project-list.html" . }}
+{{- end }}{{ end }}
+
+{{- with site.GetPage "/posts" }}{{ with .Pages.ByDate.Reverse }}
+<div class="section-head">
+  <h2>Последние записи</h2>
+  {{- if gt (len .) site.Params.homePostsLimit }}<a href="{{ "/posts/" | relURL }}">Все записи →</a>{{ end }}
+</div>
+{{ partial "post-list.html" (dict "pages" (first site.Params.homePostsLimit .)) }}
+{{- end }}{{ end }}
+{{ end }}

@@ -1,0 +1,48 @@
+# Всё, что меняется без кода (имя, «обо мне», ссылки, подвал, цвет),
+# живёт в data/site.yaml и редактируется через /admin.
+# baseURL на проде передаётся из CI: hugo --baseURL "$SITE_URL/".
+baseURL: http://localhost:1313/
+locale: ru-RU
+defaultContentLanguage: ru
+title: Персональный сайт
+enableRobotsTXT: true
+
+disableKinds: [taxonomy, term]
+
+outputs:
+  home: [html]
+  section: [html, rss]
+
+permalinks:
+  page:
+    posts: /posts/:contentbasename/
+    projects: /projects/:contentbasename/
+
+markup:
+  goldmark:
+    parser:
+      # Картинка отдельным абзацем → <figure> с подписью (render-image.html)
+      wrapStandAloneImageWithinParagraph: false
+    renderer:
+      unsafe: false
+    extensions:
+      passthrough:
+        enable: true
+        delimiters:
+          block: [['\[', '\]'], ['$$', '$$']]
+          inline: [['\(', '\)']]
+  highlight:
+    noClasses: false
+
+imaging:
+  webp:
+    quality: 82
+  resampleFilter: lanczos
+
+services:
+  rss:
+    limit: 30
+
+params:
+  # Сколько последних записей показывать на главной
+  homePostsLimit: 5

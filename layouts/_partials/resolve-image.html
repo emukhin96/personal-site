@@ -1,0 +1,16 @@
+{{- /*
+  Находит картинку как ресурс Hugo, чтобы её можно было уменьшить и сжать.
+  path — значение из front matter или Markdown:
+    "cover.jpg"         → файл рядом с записью (page bundle);
+    "/uploads/x.jpg"    → общая медиатека, assets/uploads/x.jpg.
+  Возвращает ресурс или nil (внешняя ссылка, файл не найден).
+*/}}
+{{- $res := false }}
+{{- with .path }}
+  {{- $path := . }}
+  {{- if not (strings.Contains $path "://") }}
+    {{- with $.page }}{{ $res = .Resources.Get $path }}{{ end }}
+    {{- if not $res }}{{ $res = resources.Get (strings.TrimPrefix "/" $path) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- return $res }}
